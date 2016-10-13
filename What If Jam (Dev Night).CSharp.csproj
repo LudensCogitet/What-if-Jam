@@ -74,6 +74,7 @@
     <Compile Include="Assets\Foot.cs" />
     <Compile Include="Assets\HeadSpace.cs" />
     <Compile Include="Assets\Manager.cs" />
+    <Compile Include="Assets\Timer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

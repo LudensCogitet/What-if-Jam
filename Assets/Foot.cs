@@ -17,11 +17,11 @@ public class Foot : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        player.onGround = true;
+        player.onGround++;
     }
 
     void OnTriggerExit2D(Collider2D col)
     {
-        player.onGround = false;
+        player.onGround--;
     }
 }

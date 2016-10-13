@@ -8,14 +8,17 @@ public class BeefyLeg : MonoBehaviour {
     public Rigidbody2D myHips;
     public HingeJoint2D myKnee;
 
-    public AudioSource hitSound;
+    public AudioSource sound;
+    public AudioClip jumpSound;
+    public AudioClip hitSound;
+    public float hitVolume = 1f;
 
     public Rigidbody2D myCalf;
     public HingeJoint2D myAnkle;
 
     public float health = 1000f;
 
-    public bool onGround = true;
+    public int onGround;
     public bool hitHead = false;
 
     public Vector2 jumpForce;
@@ -39,7 +42,7 @@ public class BeefyLeg : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
-        hitSound = GetComponentInChildren<AudioSource>();
+        sound = GetComponentInChildren<AudioSource>();
         myBody = GetComponent<Rigidbody2D>();
 
         torqueLeft = bodyTorque;
@@ -71,12 +74,13 @@ public class BeefyLeg : MonoBehaviour {
             if (storedForce.y <= maxStoredForce)
                 storedForce += Vector2.up * jForceMultiplier;
         }
-        if(Input.GetKeyUp(KeyCode.Space) && onGround == true)
+        if(Input.GetKeyUp(KeyCode.Space) && onGround > 0)
         {
             myBody.AddRelativeForce(storedForce, ForceMode2D.Force);
             myCalf.AddTorque(footTorque);
             myHips.AddTorque(-footTorque);
             storedForce = jumpForce = Vector2.left + Vector2.up * jForceMultiplier * 10;
+            sound.PlayOneShot(jumpSound,1f);
         }
     }
 
@@ -86,11 +90,11 @@ public class BeefyLeg : MonoBehaviour {
         {
             float damage = Mathf.Abs(myBody.angularVelocity + myBody.velocity.x);
             if (damage / 100 > 0.01)
-                hitSound.volume = damage / 300;
+                hitVolume = damage / 300;
             else
-                hitSound.volume = 0.01f;
+               hitVolume = 0.01f;
 
-            hitSound.Play();
+            sound.PlayOneShot(hitSound,hitVolume);
             headInjury.enabled = true;
             Invoke("FlashRed", 0.1f);
             health -= Mathf.Abs(myBody.angularVelocity + myBody.velocity.x);
