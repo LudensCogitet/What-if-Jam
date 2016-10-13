@@ -1,0 +1,227 @@
+fileFormatVersion: 2
+guid: bc2e4eb25a43cce41ab561b341e09e43
+timeCreated: 1476339917
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: BeefyLegColor_0
+    21300002: BeefyLegColor_1
+    21300004: BeefyLegColor_2
+    21300006: BeefyLegColor_3
+    21300008: BeefyLegColor_4
+    21300010: BeefyLegColor_5
+    21300012: BeefyLegColor_6
+    21300014: BeefyLegColor_7
+    21300016: BeefyLegColor_8
+    21300018: BeefyLegColor_9
+    21300020: BeefyLegColor_10
+    21300022: BeefyLegColor_11
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 7
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -3
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  allowsAlphaSplitting: 0
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 150
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: BeefyLegColor_0
+      rect:
+        serializedVersion: 2
+        x: 10
+        y: 443
+        width: 223
+        height: 336
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_1
+      rect:
+        serializedVersion: 2
+        x: 271
+        y: 435
+        width: 46
+        height: 195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_2
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 442
+        width: 42
+        height: 189
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_3
+      rect:
+        serializedVersion: 2
+        x: 749
+        y: 212
+        width: 149
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_4
+      rect:
+        serializedVersion: 2
+        x: 982
+        y: 212
+        width: 149
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_5
+      rect:
+        serializedVersion: 2
+        x: 1454
+        y: 442
+        width: 42
+        height: 189
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_6
+      rect:
+        serializedVersion: 2
+        x: 1563
+        y: 435
+        width: 46
+        height: 195
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_7
+      rect:
+        serializedVersion: 2
+        x: 1647
+        y: 443
+        width: 223
+        height: 336
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_8
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 74
+        width: 139
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_9
+      rect:
+        serializedVersion: 2
+        x: 507
+        y: 0
+        width: 155
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_10
+      rect:
+        serializedVersion: 2
+        x: 1218
+        y: 0
+        width: 155
+        height: 79
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: BeefyLegColor_11
+      rect:
+        serializedVersion: 2
+        x: 1467
+        y: 74
+        width: 139
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    outline: []
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
