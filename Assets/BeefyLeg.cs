@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityStandardAssets.ImageEffects;
 using System.Collections;
 
 public class BeefyLeg : MonoBehaviour {
@@ -19,7 +20,10 @@ public class BeefyLeg : MonoBehaviour {
     public Rigidbody2D myCalf;
     public HingeJoint2D myAnkle;
 
-    public float health = 1000f;
+    public BlurOptimized blurEffect;
+
+    public float maxHealth = 100f;
+    public float health;
 
     public int onGround;
     public bool hitHead = false;
@@ -32,6 +36,7 @@ public class BeefyLeg : MonoBehaviour {
 
     public float bodyTorque;
     public float initBodyTorqueMultiplier;
+    public float backwardTorqueBoost;
 
     public float footTorque;
  
@@ -48,6 +53,9 @@ public class BeefyLeg : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        blurEffect = Camera.main.GetComponent<BlurOptimized>();
+        health = maxHealth;
+
         sound = GetComponentInChildren<AudioSource>();
         myBody = GetComponent<Rigidbody2D>();
 
@@ -63,6 +71,27 @@ public class BeefyLeg : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        if (health < maxHealth)
+        {
+            health += 20 * Time.deltaTime;
+        }
+        else
+            health = maxHealth;
+
+        if (blurEffect.enabled)
+        {
+            if (health == maxHealth)
+            {
+                blurEffect.enabled = false;
+                blurEffect.blurSize = 0f;
+            }
+            else
+            {
+                blurEffect.blurSize = 1 - health/500;
+            }
+
+        }
+
         if (Input.GetKeyDown(KeyCode.Return))
         {
             SceneManager.LoadScene(0);
@@ -82,11 +111,11 @@ public class BeefyLeg : MonoBehaviour {
         }
         if (Input.GetKeyDown(KeyCode.RightArrow))
         {
-            myBody.AddTorque(-bodyTorque * initBodyTorqueMultiplier);
+            myBody.AddTorque(-bodyTorque + backwardTorqueBoost * initBodyTorqueMultiplier);
         }
         else if (Input.GetKey(KeyCode.RightArrow))
         {
-            myBody.AddTorque(-bodyTorque);
+            myBody.AddTorque(-bodyTorque + -backwardTorqueBoost);
             if (Input.GetKey(KeyCode.UpArrow))
             {
                 myLeftShoulder.useMotor = true;
@@ -129,19 +158,21 @@ public class BeefyLeg : MonoBehaviour {
     {
         if (hitHead == true)
         {
-            float damage = Mathf.Abs(myBody.angularVelocity + myBody.velocity.x);
+            if (!blurEffect.enabled)
+            {
+                blurEffect.enabled = true;
+            }
 
+            float damage = Mathf.Abs(myBody.velocity.x) + Mathf.Abs(myBody.velocity.y) + Mathf.Abs(myBody.angularVelocity);
+            Debug.Log("velocity: " + damage);
             sound.PlayOneShot(hitSound,hitVolume);
             headInjury.enabled = true;
             Invoke("FlashRed", 0.1f);
             health -= damage;
-            Debug.Log(Mathf.Abs(myBody.angularVelocity + myBody.velocity.x));
+            if (health < 0)
+                health = 0;
+            Debug.Log("Health:" + health);
             hitHead = false;
-
-            if(health <= 0)
-            {
-                SceneManager.LoadScene(0);
-            }
         }
     }
 
