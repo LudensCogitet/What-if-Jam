@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityStandardAssets.ImageEffects;
+using UnityEngine.UI;
 using System.Collections;
 
 public class BeefyLeg : MonoBehaviour {
@@ -8,6 +9,7 @@ public class BeefyLeg : MonoBehaviour {
     public Rigidbody2D myBody;
     public Rigidbody2D myHips;
     public HingeJoint2D myKnee;
+    public Slider powerMeter;
 
     public HingeJoint2D myLeftShoulder;
     public HingeJoint2D myRightShoulder;
@@ -53,6 +55,8 @@ public class BeefyLeg : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+
+       
         blurEffect = Camera.main.GetComponent<BlurOptimized>();
         health = maxHealth;
 
@@ -66,11 +70,15 @@ public class BeefyLeg : MonoBehaviour {
         rightScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
 
         jumpForce = Vector2.up * jForceMultiplier * initJForceMultiplier;
-        storedForce = jumpForce;    
+        storedForce = jumpForce;
+
+        powerMeter.minValue = storedForce.y;
+        powerMeter.maxValue = maxStoredForce;
     }
 	
 	// Update is called once per frame
 	void Update () {
+        powerMeter.value = storedForce.y;
         if (health < maxHealth)
         {
             health += 20 * Time.deltaTime;
@@ -144,13 +152,20 @@ public class BeefyLeg : MonoBehaviour {
             if (storedForce.y <= maxStoredForce)
                 storedForce += Vector2.up * jForceMultiplier;
         }
-        if(Input.GetKeyUp(KeyCode.Space) && onGround > 0)
+        if(Input.GetKeyUp(KeyCode.Space))
         {
-            myBody.AddRelativeForce(storedForce, ForceMode2D.Force);
-            myCalf.AddTorque(footTorque);
-            myHips.AddTorque(-footTorque);
-            storedForce = jumpForce = Vector2.up * jForceMultiplier * initJForceMultiplier;
-            sound.PlayOneShot(jumpSound,1f);
+            if (onGround > 0)
+            {
+                myBody.AddRelativeForce(storedForce, ForceMode2D.Force);
+                myCalf.AddTorque(footTorque);
+                myHips.AddTorque(-footTorque);
+                storedForce = jumpForce = Vector2.up * jForceMultiplier * initJForceMultiplier;
+                sound.PlayOneShot(jumpSound, 1f);
+            }
+            else
+            {
+                storedForce = jumpForce = Vector2.up * jForceMultiplier * initJForceMultiplier;
+            }
         }
     }
 
