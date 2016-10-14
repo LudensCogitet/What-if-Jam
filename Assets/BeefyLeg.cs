@@ -31,6 +31,8 @@ public class BeefyLeg : MonoBehaviour {
     public float maxStoredForce = 2000f;
 
     public float bodyTorque;
+    public float initBodyTorqueMultiplier;
+
     public float footTorque;
  
     public float torqueLeft;
@@ -66,7 +68,11 @@ public class BeefyLeg : MonoBehaviour {
             SceneManager.LoadScene(0);
         }
 
-        if (Input.GetKey(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            myBody.AddTorque(bodyTorque * initBodyTorqueMultiplier);
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
         {
             myBody.AddTorque(bodyTorque);
             if (Input.GetKey(KeyCode.UpArrow))
@@ -74,7 +80,11 @@ public class BeefyLeg : MonoBehaviour {
                 myRightShoulder.useMotor = true;
             }
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            myBody.AddTorque(-bodyTorque * initBodyTorqueMultiplier);
+        }
+        else if (Input.GetKey(KeyCode.RightArrow))
         {
             myBody.AddTorque(-bodyTorque);
             if (Input.GetKey(KeyCode.UpArrow))
@@ -82,6 +92,13 @@ public class BeefyLeg : MonoBehaviour {
                 myLeftShoulder.useMotor = true;
             }
         }
+
+        if (Input.GetKeyUp(KeyCode.UpArrow))
+        {
+            myLeftShoulder.useMotor = false;
+            myRightShoulder.useMotor = false;
+        }
+
         if (Input.GetKeyUp(KeyCode.LeftArrow))
         {
             myBody.angularVelocity = 0;// AddTorque(bodyTorque);
@@ -113,15 +130,11 @@ public class BeefyLeg : MonoBehaviour {
         if (hitHead == true)
         {
             float damage = Mathf.Abs(myBody.angularVelocity + myBody.velocity.x);
-            if (damage / 100 > 0.01)
-                hitVolume = damage / 300;
-            else
-               hitVolume = 0.01f;
 
             sound.PlayOneShot(hitSound,hitVolume);
             headInjury.enabled = true;
             Invoke("FlashRed", 0.1f);
-            health -= Mathf.Abs(myBody.angularVelocity + myBody.velocity.x);
+            health -= damage;
             Debug.Log(Mathf.Abs(myBody.angularVelocity + myBody.velocity.x));
             hitHead = false;
 
