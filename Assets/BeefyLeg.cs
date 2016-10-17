@@ -10,13 +10,22 @@ public class BeefyLeg : MonoBehaviour {
     public Rigidbody2D myHips;
     public HingeJoint2D myKnee;
     public Slider powerMeter;
+    public Slider healthBar;
+    public Slider damageBar;
+
+    public SpriteRenderer dealWithIt;
+    bool secretStarting = false;
+    bool secretsOn = false;
 
     public HingeJoint2D myLeftShoulder;
     public HingeJoint2D myRightShoulder;
+    public bool crossArmPose = false;
 
     public AudioSource sound;
     public AudioClip jumpSound;
     public AudioClip hitSound;
+    public AudioClip jumpAround;
+
     public float hitVolume = 1f;
 
     public Rigidbody2D myCalf;
@@ -26,6 +35,8 @@ public class BeefyLeg : MonoBehaviour {
 
     public float maxHealth = 100f;
     public float health;
+
+    public float damage;
 
     public int onGround;
     public bool hitHead = false;
@@ -39,6 +50,10 @@ public class BeefyLeg : MonoBehaviour {
     public float bodyTorque;
     public float initBodyTorqueMultiplier;
     public float backwardTorqueBoost;
+
+    public float blurTime = 0f;
+    public float maxBlurTime;
+    public float blurTimeInc;
 
     public float footTorque;
  
@@ -54,11 +69,15 @@ public class BeefyLeg : MonoBehaviour {
 
     // Use this for initialization
     void Start()
-    {
-
-       
+    {   
         blurEffect = Camera.main.GetComponent<BlurOptimized>();
         health = maxHealth;
+
+        healthBar.minValue = 0;
+        healthBar.maxValue = maxHealth;
+        healthBar.value = maxHealth;
+        damageBar.minValue = 0;
+        damageBar.maxValue = maxHealth;
 
         sound = GetComponentInChildren<AudioSource>();
         myBody = GetComponent<Rigidbody2D>();
@@ -78,24 +97,34 @@ public class BeefyLeg : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+        damage = Mathf.Abs(myBody.velocity.x) + Mathf.Abs(myBody.velocity.y) + Mathf.Abs(myBody.angularVelocity);
+
         powerMeter.value = storedForce.y;
+        healthBar.value = health;
+        damageBar.value = health - damage;
         if (health < maxHealth)
         {
-            health += 20 * Time.deltaTime;
+            if(health <= 0)
+            {
+                SceneManager.LoadScene("YouDead");
+            }
+            health += 1 * Time.deltaTime;
         }
         else
             health = maxHealth;
 
         if (blurEffect.enabled)
         {
-            if (health == maxHealth)
+            if (blurTime >= maxBlurTime)
             {
                 blurEffect.enabled = false;
                 blurEffect.blurSize = 0f;
+                blurTime = 0f;
             }
             else
             {
-                blurEffect.blurSize = 1 - health/500;
+                blurEffect.blurSize = maxBlurTime - blurTime;
+                blurTime += blurTimeInc * Time.deltaTime;
             }
 
         }
@@ -130,6 +159,36 @@ public class BeefyLeg : MonoBehaviour {
             }
         }
 
+        if (Input.GetKey(KeyCode.DownArrow) && Input.GetKey(KeyCode.UpArrow) && crossArmPose == false)
+        {
+            crossArmPose = true;
+            JointMotor2D tempMotor = myLeftShoulder.motor;
+            myLeftShoulder.motor = myRightShoulder.motor;
+            myRightShoulder.motor = tempMotor;
+
+            myLeftShoulder.useMotor = true;
+            myRightShoulder.useMotor = true;
+            if(secretStarting == false && secretsOn == false)
+                Invoke("StartSecret", 5f);
+
+        }
+        if (Input.GetKeyUp(KeyCode.DownArrow) && crossArmPose == true)
+        {
+
+            JointMotor2D tempMotor = myLeftShoulder.motor;
+            myLeftShoulder.motor = myRightShoulder.motor;
+            myRightShoulder.motor = tempMotor;
+
+            myLeftShoulder.useMotor = false;
+            myRightShoulder.useMotor = false;
+            crossArmPose = false;
+            if(secretStarting == true && secretsOn == false)
+            {
+                CancelInvoke("TheSecretsOn");
+                sound.Stop();
+            }
+
+        }
         if (Input.GetKeyUp(KeyCode.UpArrow))
         {
             myLeftShoulder.useMotor = false;
@@ -169,6 +228,18 @@ public class BeefyLeg : MonoBehaviour {
         }
     }
 
+    void StartSecret()
+    {
+        sound.PlayOneShot(jumpAround);
+        secretStarting = true;
+        Invoke("TheSecretsOn", 7);
+    }
+    void TheSecretsOn()
+    {
+        secretsOn = true;
+        dealWithIt.enabled = true;
+    }
+
     void OnCollisionEnter2D(Collision2D col)
     {
         if (hitHead == true)
@@ -177,8 +248,6 @@ public class BeefyLeg : MonoBehaviour {
             {
                 blurEffect.enabled = true;
             }
-
-            float damage = Mathf.Abs(myBody.velocity.x) + Mathf.Abs(myBody.velocity.y) + Mathf.Abs(myBody.angularVelocity);
             Debug.Log("velocity: " + damage);
             sound.PlayOneShot(hitSound,hitVolume);
             headInjury.enabled = true;
@@ -188,6 +257,11 @@ public class BeefyLeg : MonoBehaviour {
                 health = 0;
             Debug.Log("Health:" + health);
             hitHead = false;
+        }
+
+        if (col.gameObject.CompareTag("Deadly"))
+        {
+            SceneManager.LoadScene("YouDead");
         }
     }
 
