@@ -37,6 +37,7 @@ public class BeefyLeg : MonoBehaviour {
     public float health;
 
     public float damage;
+    public float regenTime = 10f;
 
     public int onGround;
     public bool hitHead = false;
@@ -96,24 +97,20 @@ public class BeefyLeg : MonoBehaviour {
         powerMeter.minValue = storedForce.y;
         powerMeter.maxValue = maxStoredForce;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         damage = Mathf.Abs(myBody.velocity.x) + Mathf.Abs(myBody.velocity.y) + Mathf.Abs(myBody.angularVelocity);
 
         powerMeter.value = storedForce.y;
         healthBar.value = health;
         damageBar.value = health - damage;
-        if (health < maxHealth)
+        if (health <= 0)
         {
-            if(health <= 0)
-            {
-                
-                SceneManager.LoadScene("LevelEnd");
-            }
-            health += 1 * Time.deltaTime;
+            SceneManager.LoadScene("LevelEnd");
         }
-        else
+        else if (health > maxHealth)
             health = maxHealth;
 
         if (blurEffect.enabled)
@@ -171,7 +168,7 @@ public class BeefyLeg : MonoBehaviour {
 
             myLeftShoulder.useMotor = true;
             myRightShoulder.useMotor = true;
-            if(secretStarting == false && secretsOn == false)
+            if (secretStarting == false && secretsOn == false)
                 Invoke("StartSecret", 5f);
 
         }
@@ -185,7 +182,7 @@ public class BeefyLeg : MonoBehaviour {
             myLeftShoulder.useMotor = false;
             myRightShoulder.useMotor = false;
             crossArmPose = false;
-            if(secretStarting == true && secretsOn == false)
+            if (secretStarting == true && secretsOn == false)
             {
                 CancelInvoke("TheSecretsOn");
                 sound.Stop();
@@ -214,7 +211,7 @@ public class BeefyLeg : MonoBehaviour {
             if (storedForce.y <= maxStoredForce)
                 storedForce += Vector2.up * jForceMultiplier;
         }
-        if(Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.Space))
         {
             if (onGround > 0)
             {
@@ -260,12 +257,21 @@ public class BeefyLeg : MonoBehaviour {
                 health = 0;
             Debug.Log("Health:" + health);
             hitHead = false;
+            if (IsInvoking("regenHealth"))
+                CancelInvoke("regenHealth");
+
+            Invoke("regenHealth", regenTime);
         }
 
         if (col.gameObject.CompareTag("Deadly"))
         {
             SceneManager.LoadScene("LevelEnd");
         }
+    }
+
+    void regenHealth()
+    {
+        health = maxHealth;
     }
 
     void FlashRed()
