@@ -40,6 +40,21 @@ public class Elevator : MonoBehaviour {
         }
     }
 
+    void OnCollisionEnter2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            FindObjectOfType<BeefyLeg>().transform.parent = transform;
+        }
+    }
+    void OnCollisionExit2D(Collision2D col)
+    {
+        if (col.gameObject.CompareTag("Player"))
+        {
+            FindObjectOfType<BeefyLeg>().transform.parent = null;
+        }
+    }
+
     void MoveDown()
     {
         moving = movement.down;

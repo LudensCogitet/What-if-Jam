@@ -35,12 +35,14 @@ public class BeefyLeg : MonoBehaviour {
 
     public float maxHealth = 100f;
     public float health;
+    float lastHealth;
 
     public float damage;
     public float regenTime = 10f;
+    public float hitHeadTime = 1f;
 
     public int onGround;
-    public bool hitHead = false;
+    public bool hitHead;
 
     public Vector2 jumpForce;
     public float jForceMultiplier;
@@ -73,9 +75,9 @@ public class BeefyLeg : MonoBehaviour {
     {
         LevelEndManager.currentLevel = LevelEndManager.nextLevel = SceneManager.GetActiveScene().buildIndex;
 
-
         blurEffect = Camera.main.GetComponent<BlurOptimized>();
         health = maxHealth;
+        lastHealth = health;
 
         healthBar.minValue = 0;
         healthBar.maxValue = maxHealth;
@@ -108,6 +110,9 @@ public class BeefyLeg : MonoBehaviour {
         damageBar.value = health - damage;
         if (health <= 0)
         {
+            if (lastHealth == maxHealth)
+                health = 1;
+            else
             SceneManager.LoadScene("LevelEnd");
         }
         else if (health > maxHealth)
@@ -252,6 +257,7 @@ public class BeefyLeg : MonoBehaviour {
             sound.PlayOneShot(hitSound,hitVolume);
             headInjury.enabled = true;
             Invoke("FlashRed", 0.1f);
+            lastHealth = health;
             health -= damage;
             if (health < 0)
                 health = 0;
@@ -261,6 +267,8 @@ public class BeefyLeg : MonoBehaviour {
                 CancelInvoke("regenHealth");
 
             Invoke("regenHealth", regenTime);
+            Debug.Log("HitHead");
+            Invoke("HitHead", hitHeadTime);
         }
 
         if (col.gameObject.CompareTag("Deadly"))
@@ -269,9 +277,16 @@ public class BeefyLeg : MonoBehaviour {
         }
     }
 
+    void HitHead()
+    {
+        Debug.Log("HitHead");
+        hitHead = true;
+    }
+
     void regenHealth()
     {
         health = maxHealth;
+        lastHealth = health;
     }
 
     void FlashRed()

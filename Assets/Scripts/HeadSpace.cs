@@ -17,6 +17,6 @@ public class HeadSpace : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-        player.hitHead = true;
+        //player.hitHead = true;
     }
 }
