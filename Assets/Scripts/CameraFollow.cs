@@ -7,7 +7,7 @@ public class CameraFollow : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-	
+        player = FindObjectOfType<BeefyLeg>().transform;
 	}
 	
 	// Update is called once per frame

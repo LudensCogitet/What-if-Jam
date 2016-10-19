@@ -35,7 +35,9 @@ public class BeefyLeg : MonoBehaviour {
 
     public float maxHealth = 100f;
     public float health;
+    public float healthInc = 1f;
     float lastHealth;
+    Coroutine healthStep = null;
 
     public float damage;
     public float regenTime = 10f;
@@ -103,7 +105,7 @@ public class BeefyLeg : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        damage = Mathf.Abs(myBody.velocity.x) + Mathf.Abs(myBody.velocity.y) + Mathf.Abs(myBody.angularVelocity);
+        damage = Mathf.Abs(myBody.velocity.x) + Mathf.Abs(myBody.velocity.y); //+ Mathf.Abs(myBody.angularVelocity);
 
         powerMeter.value = storedForce.y;
         healthBar.value = health;
@@ -191,6 +193,8 @@ public class BeefyLeg : MonoBehaviour {
             {
                 CancelInvoke("TheSecretsOn");
                 sound.Stop();
+                FindObjectOfType<MusicPlayer>().GetComponent<AudioSource>().Play();
+                secretStarting = false;
             }
 
         }
@@ -235,6 +239,7 @@ public class BeefyLeg : MonoBehaviour {
 
     void StartSecret()
     {
+        FindObjectOfType<MusicPlayer>().GetComponent<AudioSource>().Stop();
         sound.PlayOneShot(jumpAround);
         secretStarting = true;
         Invoke("TheSecretsOn", 7);
@@ -249,26 +254,35 @@ public class BeefyLeg : MonoBehaviour {
     {
         if (hitHead == true)
         {
-            if (!blurEffect.enabled)
+            if (damage > 9f)
             {
-                blurEffect.enabled = true;
-            }
-            Debug.Log("velocity: " + damage);
-            sound.PlayOneShot(hitSound,hitVolume);
-            headInjury.enabled = true;
-            Invoke("FlashRed", 0.1f);
-            lastHealth = health;
-            health -= damage;
-            if (health < 0)
-                health = 0;
-            Debug.Log("Health:" + health);
-            hitHead = false;
-            if (IsInvoking("regenHealth"))
-                CancelInvoke("regenHealth");
+                if (!blurEffect.enabled)
+                {
+                    blurEffect.enabled = true;
+                }
+                Debug.Log("velocity: " + damage);
+                sound.PlayOneShot(hitSound, hitVolume);
+                headInjury.enabled = true;
+                Invoke("FlashRed", 0.1f);
+                lastHealth = health;
+                health -= damage;
+                if (health < 0)
+                    health = 0;
+                Debug.Log("Health:" + health);
+                hitHead = false;
+                if (IsInvoking("regenHealth"))
+                    CancelInvoke("regenHealth");
 
-            Invoke("regenHealth", regenTime);
-            Debug.Log("HitHead");
-            Invoke("HitHead", hitHeadTime);
+                if (healthStep != null)
+                {
+                    StopCoroutine(healthStep);
+                    healthStep = null;
+                }
+
+                Invoke("regenHealth", regenTime);
+                Debug.Log("HitHead");
+                Invoke("HitHead", hitHeadTime);
+            }
         }
 
         if (col.gameObject.CompareTag("Deadly"))
@@ -285,8 +299,19 @@ public class BeefyLeg : MonoBehaviour {
 
     void regenHealth()
     {
-        health = maxHealth;
-        lastHealth = health;
+        healthStep = StartCoroutine(HealthStep());
+    }
+
+    IEnumerator HealthStep()
+    {
+        Debug.Log("corutine started");
+        while (health != maxHealth)
+        {
+            Debug.Log("corutine running");
+            lastHealth = health;
+            health = Mathf.MoveTowards(health, maxHealth, healthInc);
+            yield return null;
+        }
     }
 
     void FlashRed()

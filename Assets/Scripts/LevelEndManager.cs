@@ -10,8 +10,14 @@ public class LevelEndManager : MonoBehaviour {
 
     public Text[] winner;
     public Text[] dead;
+    public Text loading;
 	// Use this for initialization
 	void Start () {
+        if(MusicPlayer.instance.GetComponent<AudioSource>().isPlaying == false)
+        {
+            MusicPlayer.instance.GetComponent<AudioSource>().Play();
+        }
+
         if (winner != null && dead != null)
         {
             if (currentLevel == nextLevel)
@@ -24,6 +30,7 @@ public class LevelEndManager : MonoBehaviour {
                 {
                     dead[i].enabled = true;
                 }
+                GameObject.Find("EEEUG").GetComponent<AudioSource>().Play();
             }
             else
             {
@@ -35,6 +42,7 @@ public class LevelEndManager : MonoBehaviour {
                 {
                     dead[i].enabled = false;
                 }
+                GameObject.Find("Yay").GetComponent<AudioSource>().Play();
             }
         }
 	}
@@ -43,6 +51,7 @@ public class LevelEndManager : MonoBehaviour {
 	void Update () {
         if (Input.GetKey(KeyCode.Space))
         {
+            loading.enabled = true;
             SceneManager.LoadScene(nextLevel);
         }
 	}
