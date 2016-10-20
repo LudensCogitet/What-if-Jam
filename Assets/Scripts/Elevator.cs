@@ -30,8 +30,7 @@ public class Elevator : MonoBehaviour {
         rightElevator.enabled = true;
 	}
 
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if (moving != movement.none)
         {
@@ -41,7 +40,11 @@ public class Elevator : MonoBehaviour {
         {
             myBody.MovePosition(savedPos);
         }
+    }
 
+    // Update is called once per frame
+    void Update()
+    {
     }
 
     void OnCollisionEnter2D(Collision2D col)

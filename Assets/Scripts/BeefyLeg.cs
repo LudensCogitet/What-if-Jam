@@ -14,6 +14,7 @@ public class BeefyLeg : MonoBehaviour {
     public Slider damageBar;
 
 
+    public Transform checkpoint = null;
     public bool onElevator = false;
     public SpriteRenderer dealWithIt;
     bool secretStarting = false;
@@ -27,6 +28,7 @@ public class BeefyLeg : MonoBehaviour {
     public AudioClip jumpSound;
     public AudioClip hitSound;
     public AudioClip jumpAround;
+    public AudioClip death;
 
     public float hitVolume = 1f;
     
@@ -117,7 +119,7 @@ public class BeefyLeg : MonoBehaviour {
             if (lastHealth == maxHealth)
                 health = 1;
             else
-            SceneManager.LoadScene("LevelEnd");
+                Die();
         }
         else if (health > maxHealth)
             health = maxHealth;
@@ -140,7 +142,7 @@ public class BeefyLeg : MonoBehaviour {
 
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            SceneManager.LoadScene(LevelEndManager.currentLevel);
+            Die();
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -252,6 +254,19 @@ public class BeefyLeg : MonoBehaviour {
         dealWithIt.enabled = true;
     }
 
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if (col.gameObject.CompareTag("Deadly"))
+        {
+            Die();
+        }
+        if (col.gameObject.CompareTag("Checkpoint"))
+        {
+            Debug.Log("CheckPoint");
+            checkpoint = col.gameObject.transform;
+        }
+    }
+
     void OnCollisionEnter2D(Collision2D col)
     {
         if (hitHead == true && onElevator == false)
@@ -289,14 +304,14 @@ public class BeefyLeg : MonoBehaviour {
 
         if (col.gameObject.CompareTag("Deadly"))
         {
-            SceneManager.LoadScene("LevelEnd");
+            Die();
         }
         
         if(onElevator == true)
         {
             if(col.gameObject.CompareTag("Elevator") == false)
             {
-                SceneManager.LoadScene("LevelEnd");
+                Die();
             }
         }
     }
@@ -321,6 +336,20 @@ public class BeefyLeg : MonoBehaviour {
             lastHealth = health;
             health = Mathf.MoveTowards(health, maxHealth, healthInc);
             yield return null;
+        }
+    }
+
+    public void Die()
+    {
+        if(checkpoint != null)
+        {
+            sound.PlayOneShot(death);
+            transform.position = checkpoint.position;
+            health = maxHealth;
+        }
+        else
+        {
+            SceneManager.LoadScene("LevelEnd");
         }
     }
 

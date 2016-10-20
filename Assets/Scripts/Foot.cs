@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class Foot : MonoBehaviour {
@@ -18,6 +19,8 @@ public class Foot : MonoBehaviour {
     void OnTriggerEnter2D(Collider2D col)
     {
         player.onGround++;
+        if (col.gameObject.CompareTag("Deadly"))
+            player.Die();
     }
 
     void OnTriggerExit2D(Collider2D col)
