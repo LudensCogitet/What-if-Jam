@@ -13,6 +13,8 @@ public class BeefyLeg : MonoBehaviour {
     public Slider healthBar;
     public Slider damageBar;
 
+
+    public bool onElevator = false;
     public SpriteRenderer dealWithIt;
     bool secretStarting = false;
     bool secretsOn = false;
@@ -252,7 +254,7 @@ public class BeefyLeg : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (hitHead == true)
+        if (hitHead == true && onElevator == false)
         {
             if (damage > 9f)
             {
@@ -288,6 +290,14 @@ public class BeefyLeg : MonoBehaviour {
         if (col.gameObject.CompareTag("Deadly"))
         {
             SceneManager.LoadScene("LevelEnd");
+        }
+        
+        if(onElevator == true)
+        {
+            if(col.gameObject.CompareTag("Elevator") == false)
+            {
+                SceneManager.LoadScene("LevelEnd");
+            }
         }
     }
 
