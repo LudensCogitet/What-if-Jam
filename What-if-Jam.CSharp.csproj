@@ -75,14 +75,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Elevator.cs" />
+    <Compile Include="Assets\MusicPlayer.cs" />
     <Compile Include="Assets\Scripts\BeefyLeg.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\Elevator.cs" />
+    <Compile Include="Assets\Scripts\ElevatorPhysics.cs" />
     <Compile Include="Assets\Scripts\Foot.cs" />
     <Compile Include="Assets\Scripts\HeadSpace.cs" />
     <Compile Include="Assets\Scripts\LeftArm.cs" />
     <Compile Include="Assets\Scripts\LevelEndManager.cs" />
     <Compile Include="Assets\Scripts\Manager.cs" />
+    <Compile Include="Assets\Scripts\OnElevator.cs" />
     <Compile Include="Assets\Scripts\Restart_DeadScreen.cs" />
     <Compile Include="Assets\Scripts\Timer.cs" />
     <Compile Include="Assets\Scripts\WinTrigger.cs" />
